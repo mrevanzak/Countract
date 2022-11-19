@@ -59,7 +59,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               />
             </MediaQuery>
             <FiBell className='text-2xl' />
-            <div className='ml-5 h-12 w-12 rounded-full bg-gray-300'></div>
+            <div className='ml-7 h-12 w-12 rounded-full bg-gray-300'></div>
           </div>
         </Header>
       }

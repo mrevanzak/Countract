@@ -1,19 +1,30 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 import { TiDocumentText } from 'react-icons/ti';
 
+import { Item } from '@/types';
+
 type CardProps = {
-  item: {
-    name: string;
-    status: string;
-    totalApplication: number;
-    totalRequest: number;
-  };
+  item: Item;
+  index: number;
 };
 
-export default function Card({ item }: CardProps) {
+export default function Card({ item, index }: CardProps) {
+  const router = useRouter();
   return (
-    <div className='flex h-[295px] w-[354px] flex-col rounded-lg bg-white p-7'>
+    <div
+      className='flex h-[295px] w-[354px] cursor-pointer flex-col rounded-lg bg-white p-7'
+      onClick={() =>
+        router.push(
+          {
+            pathname: `/detail/${index}`,
+            query: { item: JSON.stringify(item) },
+          },
+          `/detail/${index}`
+        )
+      }
+    >
       <div className='relative h-2/3 rounded-lg bg-gray-300'>
         <div className='absolute bottom-3 left-3 flex h-8 items-center justify-between space-x-2 rounded-lg bg-white p-2'>
           <p className='text-xs'>{item.status}</p>

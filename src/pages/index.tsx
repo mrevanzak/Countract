@@ -1,6 +1,8 @@
-import { Header, Modal } from '@mantine/core';
+import { Group, Header, Image, Modal, SimpleGrid } from '@mantine/core';
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import * as React from 'react';
 import { FiSearch } from 'react-icons/fi';
+import { GrClose, GrUpload } from 'react-icons/gr';
 
 import Card from '@/components/Card';
 import Layout from '@/components/layout/Layout';
@@ -10,6 +12,19 @@ import { data } from '../data';
 
 export default function HomePage() {
   const [opened, setOpened] = React.useState(false);
+  const [files, setFiles] = React.useState<FileWithPath[]>([]);
+
+  const previews = files.map((file, index) => {
+    const imageUrl = URL.createObjectURL(file);
+    return (
+      <Image
+        key={index}
+        src={imageUrl}
+        alt={file.name}
+        imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+      />
+    );
+  });
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -53,7 +68,7 @@ export default function HomePage() {
               </div>
               <button
                 type='button'
-                className='mr-3 inline-flex items-center rounded-xl border border-transparent bg-primary-50 px-24 py-3 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                className='mr-3 inline-flex items-center rounded-xl border border-transparent bg-primary-50 px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
                 onClick={() => setOpened(true)}
               >
                 Tambah Dokumen
@@ -62,7 +77,7 @@ export default function HomePage() {
           </Header>
           <div className='mx-6 mt-32 flex flex-wrap gap-8'>
             {data.map((item, itemIdx) => (
-              <Card item={item} key={itemIdx} />
+              <Card item={item} index={itemIdx} key={itemIdx} />
             ))}
           </div>
 
@@ -73,8 +88,78 @@ export default function HomePage() {
             size={736}
           >
             <h4 className='text-center'>Tambah Dokumen</h4>
+            <div className='space-y-5'>
+              <fieldset className='mt-6 space-y-2 bg-white'>
+                <legend className='block text-sm font-medium text-gray-700'>
+                  Jenis Dokumen
+                </legend>
+                <div className='mt-1 -space-y-px rounded-md shadow-sm'>
+                  <label htmlFor='document' className='sr-only'>
+                    document
+                  </label>
+                  <select
+                    id='document'
+                    name='document'
+                    autoComplete='document-name'
+                    className='relative block w-full rounded-md border-gray-300 bg-transparent focus:z-10 focus:border-primary-50 focus:ring-primary-50 sm:text-sm'
+                  >
+                    <option>Akta Kelahiran</option>
+                    <option>Kartu Tanda Penduduk</option>
+                  </select>
+                </div>
+              </fieldset>
+              <div className='space-y-2'>
+                <label
+                  htmlFor='document-number'
+                  className='block text-sm font-medium text-gray-700'
+                >
+                  Nomor Dokumen
+                </label>
+                <div className='mt-1'>
+                  <input
+                    type='text'
+                    name='document-number'
+                    id='document-number'
+                    className='block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-50 focus:ring-primary-50 sm:text-sm'
+                  />
+                </div>
+              </div>
+              <div className='space-y-2'>
+                <p className='text-sm'>Upload Dokumen</p>
+                <p className='text-sm text-gray-400'>
+                  Masukkan bukti online/screenshot dokumen
+                </p>
+                <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
+                  <Group
+                    position='center'
+                    style={{ minHeight: 168, pointerEvents: 'none' }}
+                  >
+                    <Dropzone.Accept>
+                      <GrUpload className='text-sm' />
+                    </Dropzone.Accept>
+                    <Dropzone.Reject>
+                      <GrClose className='text-sm' />
+                    </Dropzone.Reject>
+                    <Dropzone.Idle>
+                      <p className='text-xs'>
+                        Arahkan file ke area ini, atau{' '}
+                        <span className='text-blue-400'>cari dokumen</span>
+                      </p>
+                    </Dropzone.Idle>
+                  </Group>
+                </Dropzone>
 
-            <div className='flex space-x-5'>
+                <SimpleGrid
+                  cols={4}
+                  breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
+                  mt={previews.length > 0 ? 'xl' : 0}
+                >
+                  {previews}
+                </SimpleGrid>
+              </div>
+            </div>
+
+            <div className='mt-5 flex space-x-5'>
               <button
                 type='button'
                 className='inline-flex flex-1 justify-center rounded-xl border border-transparent px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
