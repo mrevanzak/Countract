@@ -7,7 +7,7 @@ import { TiDocumentText } from 'react-icons/ti';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
-import { Item } from '@/types';
+import { Item } from '@/types/item';
 
 const lastAccess = [
   {

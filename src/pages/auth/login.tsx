@@ -1,6 +1,5 @@
+import Link from 'next/link';
 import * as React from 'react';
-import { BsFacebook } from 'react-icons/bs';
-import { FcGoogle } from 'react-icons/fc';
 
 import NextImage from '@/components/NextImage';
 
@@ -22,12 +21,12 @@ export default function LoginPage() {
             <h2 className='mt-6 text-5xl font-medium text-gray-900'>Masuk</h2>
             <p className='mt-2 text-sm text-gray-600'>
               Pengguna baru?{' '}
-              <a
-                href='#'
+              <Link
+                href='/auth/register'
                 className='font-medium text-blue-400 hover:text-blue-300'
               >
                 Buat akun baru
-              </a>
+              </Link>
             </p>
           </div>
 
@@ -93,7 +92,7 @@ export default function LoginPage() {
               </form>
             </div>
 
-            <div>
+            {/* <div>
               <div className='relative mt-6'>
                 <div
                   className='absolute inset-0 flex items-center'
@@ -105,9 +104,9 @@ export default function LoginPage() {
                   <span className='bg-white px-4 text-gray-500'>atau</span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className='space-y-6'>
+            {/* <div className='space-y-6'>
               <button
                 type='button'
                 className='flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
@@ -122,12 +121,12 @@ export default function LoginPage() {
                 <BsFacebook className='h-5 w-5 text-blue-500' />
                 <span className='ml-3'>Masuk dengan Facebook</span>
               </button>
-            </div>
+            </div> */}
 
             <p className='text-xs text-gray-500'>
-              Dilindungi dengan reCAPTCHA dan bagian dari{' '}
+              Dilindungi dan bagian dari{' '}
               <span className='text-blue-400'>Privacy Policy</span> dan{' '}
-              <span className='text-blue-400'>Terms of Service</span> Google.
+              <span className='text-blue-400'>Terms of Service</span> Countract.
             </p>
           </div>
         </div>

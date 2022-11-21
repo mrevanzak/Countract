@@ -8,7 +8,7 @@ import Card from '@/components/Card';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
-import { data } from '../data';
+import { data } from '../../data';
 
 export default function HomePage() {
   const [opened, setOpened] = React.useState(false);
@@ -105,6 +105,7 @@ export default function HomePage() {
                   >
                     <option>Akta Kelahiran</option>
                     <option>Kartu Tanda Penduduk</option>
+                    <option>Surat Izin Mengemudi</option>
                   </select>
                 </div>
               </fieldset>

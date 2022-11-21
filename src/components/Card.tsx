@@ -3,7 +3,7 @@ import * as React from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 import { TiDocumentText } from 'react-icons/ti';
 
-import { Item } from '@/types';
+import { Item } from '@/types/item';
 
 type CardProps = {
   item: Item;
@@ -18,10 +18,10 @@ export default function Card({ item, index }: CardProps) {
       onClick={() =>
         router.push(
           {
-            pathname: `/detail/${index}`,
+            pathname: `/users/detail/${index}`,
             query: { item: JSON.stringify(item) },
           },
-          `/detail/${index}`
+          `/users/detail/${index}`
         )
       }
     >
