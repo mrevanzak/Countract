@@ -1,9 +1,78 @@
 import Link from 'next/link';
 import * as React from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
+import apiMock from '@/lib/axios-mock';
+import logger from '@/lib/logger';
+
+import ButtonWithLoading from '@/components/buttons/Button';
+import withAuth from '@/components/hoc/withAuth';
+import useLoadingToast from '@/components/hooks/toasts/useLoadingToast';
 import NextImage from '@/components/NextImage';
 
-export default function LoginPage() {
+import useAuthStore from '@/store/useAuthStore';
+
+import { DEFAULT_TOAST_MESSAGE } from '@/constant/toast';
+
+import { ApiReturn } from '@/types/api';
+import { User } from '@/types/auth';
+
+type LoginData = {
+  email: string;
+  password: string;
+};
+
+export default withAuth(LoginPage, 'auth');
+function LoginPage() {
+  const isLoading = useLoadingToast();
+
+  //#region  //*=========== Store ===========
+  const login = useAuthStore.useLogin();
+  //#endregion  //*======== Store ===========
+
+  //#region  //*============== Form
+  const methods = useForm<LoginData>({
+    mode: 'onTouched',
+    defaultValues: {
+      email: 'me@email.com',
+      password: 'password',
+    },
+  });
+  const { handleSubmit } = methods;
+  //#endregion  //*============== Form
+
+  //#region //*============== Form Submit
+  const onSubmit: SubmitHandler<LoginData> = (data) => {
+    logger({ data }, 'signin.tsx line 36');
+    let tempToken: string;
+
+    toast.promise(
+      apiMock
+        .post(`/login`, data)
+        .then((res) => {
+          const { token } = res.data.data;
+          tempToken = token;
+          localStorage.setItem('token', token);
+
+          return apiMock.get<ApiReturn<User>>('/me');
+        })
+        .then((user) => {
+          login({
+            ...user.data.data,
+            token: tempToken,
+          });
+        }),
+      {
+        ...DEFAULT_TOAST_MESSAGE,
+        success: 'Successfully logged in',
+      }
+    );
+
+    return;
+  };
+  //#endregion //*============== Form Submit
+
   return (
     <div className='flex min-h-screen'>
       <div className='relative hidden w-0 flex-1 lg:block'>
@@ -32,96 +101,68 @@ export default function LoginPage() {
 
           <div className='mt-8 space-y-6'>
             <div className='mt-6'>
-              <form action='#' method='POST' className='space-y-6'>
-                <div>
-                  <label
-                    htmlFor='email'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    Alamat Email
-                  </label>
-                  <div className='mt-1'>
-                    <input
-                      id='email'
-                      name='email'
-                      type='email'
-                      autoComplete='email'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
-                    />
-                  </div>
-                </div>
-
-                <div className='space-y-1'>
-                  <label
-                    htmlFor='password'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    Password
-                  </label>
-                  <div className='mt-1'>
-                    <input
-                      id='password'
-                      name='password'
-                      type='password'
-                      autoComplete='current-password'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
-                    />
-                  </div>
-                </div>
-
-                <div className='flex'>
-                  <div className='flex flex-1 items-center justify-between'>
-                    <div className='text-sm'>
-                      <a
-                        href='#'
-                        className='font-medium text-gray-400 hover:text-primary-50'
-                      >
-                        Lupa Password
-                      </a>
+              <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+                  <div>
+                    <label
+                      htmlFor='email'
+                      className='block text-sm font-medium text-gray-700'
+                    >
+                      Alamat Email
+                    </label>
+                    <div className='mt-1'>
+                      <input
+                        id='email'
+                        name='email'
+                        type='email'
+                        autoComplete='email'
+                        required
+                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
+                      />
                     </div>
                   </div>
-                  <button
-                    type='submit'
-                    className='flex w-full flex-1 justify-center rounded-md border border-transparent bg-primary-50 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
-                  >
-                    Masuk
-                  </button>
-                </div>
-              </form>
+
+                  <div className='space-y-1'>
+                    <label
+                      htmlFor='password'
+                      className='block text-sm font-medium text-gray-700'
+                    >
+                      Password
+                    </label>
+                    <div className='mt-1'>
+                      <input
+                        id='password'
+                        name='password'
+                        type='password'
+                        autoComplete='current-password'
+                        required
+                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
+                      />
+                    </div>
+                  </div>
+
+                  <div className='flex'>
+                    <div className='flex flex-1 items-center justify-between'>
+                      <div className='text-sm'>
+                        <a
+                          href='#'
+                          className='font-medium text-gray-400 hover:text-primary-50'
+                        >
+                          Lupa Password
+                        </a>
+                      </div>
+                    </div>
+                    <ButtonWithLoading
+                      type='submit'
+                      isLoading={isLoading}
+                      className='flex w-full flex-1 justify-center rounded-md border border-transparent bg-primary-50 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                    >
+                      Masuk
+                    </ButtonWithLoading>
+                  </div>
+                </form>
+              </FormProvider>
             </div>
-
-            {/* <div>
-              <div className='relative mt-6'>
-                <div
-                  className='absolute inset-0 flex items-center'
-                  aria-hidden='true'
-                >
-                  <div className='w-full border-t border-gray-300' />
-                </div>
-                <div className='relative flex justify-center text-sm'>
-                  <span className='bg-white px-4 text-gray-500'>atau</span>
-                </div>
-              </div>
-            </div> */}
-
-            {/* <div className='space-y-6'>
-              <button
-                type='button'
-                className='flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
-              >
-                <FcGoogle className='h-5 w-5' />
-                <span className='ml-3'>Masuk dengan Google</span>
-              </button>
-              <button
-                type='button'
-                className='flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
-              >
-                <BsFacebook className='h-5 w-5 text-blue-500' />
-                <span className='ml-3'>Masuk dengan Facebook</span>
-              </button>
-            </div> */}
 
             <p className='text-xs text-gray-500'>
               Dilindungi dan bagian dari{' '}

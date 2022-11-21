@@ -4,6 +4,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { BsArrowLeft } from 'react-icons/bs';
 import { TiDocumentText } from 'react-icons/ti';
 
+import withAuth from '@/components/hoc/withAuth';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
@@ -32,7 +33,8 @@ const lastAccess = [
   },
 ];
 
-export default function DetailPage() {
+export default withAuth(DetailPage, 'all');
+function DetailPage() {
   const router = useRouter();
   const item: Item = JSON.parse(router.query.item as string);
 

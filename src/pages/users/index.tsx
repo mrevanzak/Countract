@@ -5,12 +5,14 @@ import { FiSearch } from 'react-icons/fi';
 import { GrClose, GrUpload } from 'react-icons/gr';
 
 import Card from '@/components/Card';
+import withAuth from '@/components/hoc/withAuth';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
 import { data } from '../../data';
 
-export default function HomePage() {
+export default withAuth(HomePage, 'all');
+function HomePage() {
   const [opened, setOpened] = React.useState(false);
   const [files, setFiles] = React.useState<FileWithPath[]>([]);
 

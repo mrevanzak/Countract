@@ -1,3 +1,4 @@
+import { Button } from '@mantine/core';
 import * as React from 'react';
 import { ImSpinner2 } from 'react-icons/im';
 
@@ -17,7 +18,7 @@ type ButtonProps = {
   variant?: keyof typeof ButtonVariant;
 } & React.ComponentPropsWithRef<'button'>;
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const ButtonWithLoading = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       children,
@@ -33,7 +34,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const disabled = isLoading || buttonDisabled;
 
     return (
-      <button
+      <Button
         ref={ref}
         type='button'
         disabled={disabled}
@@ -100,9 +101,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </div>
         )}
         {children}
-      </button>
+      </Button>
     );
   }
 );
 
-export default Button;
+export default ButtonWithLoading;

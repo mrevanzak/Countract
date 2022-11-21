@@ -2,9 +2,11 @@ import { Checkbox } from '@mantine/core';
 import Link from 'next/link';
 import * as React from 'react';
 
+import withAuth from '@/components/hoc/withAuth';
 import NextImage from '@/components/NextImage';
 
-export default function RegisterPage() {
+export default withAuth(RegisterPage, 'auth');
+function RegisterPage() {
   return (
     <div className='flex min-h-screen'>
       <div className='relative hidden w-0 flex-1 lg:block'>
