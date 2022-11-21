@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { MdOutlineDashboard, MdOutlinePeople } from 'react-icons/md';
-import { RiListSettingsLine } from 'react-icons/ri';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
@@ -8,20 +7,20 @@ import CountractLogo from '~/svg/logo.svg';
 
 const links = [
   {
-    href: '/',
+    href: '/users',
     label: 'Dokumen Saya',
     icon: <MdOutlineDashboard className='text-xl' />,
   },
   {
-    href: '/',
+    href: '/users/history',
     label: 'Riwayat Akses',
     icon: <MdOutlinePeople className='text-xl' />,
   },
-  {
-    href: '/',
-    label: 'Pengaturan',
-    icon: <RiListSettingsLine className='text-xl' />,
-  },
+  // {
+  //   href: '/',
+  //   label: 'Pengaturan',
+  //   icon: <RiListSettingsLine className='text-xl' />,
+  // },
 ];
 
 export default function NavbarItems() {
