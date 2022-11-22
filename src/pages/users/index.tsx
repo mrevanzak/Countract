@@ -9,7 +9,7 @@ import withAuth from '@/components/hoc/withAuth';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
-import { data } from '../../data';
+import { data } from '../../data/documents.data';
 
 export default withAuth(HomePage, 'all');
 function HomePage() {

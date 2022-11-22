@@ -56,7 +56,7 @@ function RegisterPage() {
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <label
                     htmlFor='email'
                     className='block text-sm font-medium text-gray-700'
@@ -72,7 +72,7 @@ function RegisterPage() {
                       className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div className='space-y-1'>
                   <label
