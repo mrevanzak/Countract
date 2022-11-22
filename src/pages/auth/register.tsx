@@ -2,7 +2,7 @@ import { Checkbox } from '@mantine/core';
 import Link from 'next/link';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 import apiMock from '@/lib/axios-mock';
 import logger from '@/lib/logger';
@@ -39,8 +39,8 @@ function RegisterPage() {
       .post<RegisterAPIRes>(`/user/add`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-      .then((res) => {
-        toast(res.data.message);
+      .then(() => {
+        toast.success(`Akun berhasil terdaftar`);
         reset({
           name: '',
           email: '',
@@ -51,6 +51,7 @@ function RegisterPage() {
 
   return (
     <div className='flex min-h-screen'>
+      <Toaster />
       <div className='relative hidden w-0 flex-1 lg:block'>
         <NextImage
           imgClassName='absolute inset-0 h-full w-full object-cover'

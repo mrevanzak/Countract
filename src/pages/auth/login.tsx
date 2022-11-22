@@ -57,7 +57,7 @@ function LoginPage() {
         ...DEFAULT_TOAST_MESSAGE,
         error: (err: AxiosError<LoginError>) =>
           err.response?.data.message ?? 'Error tidak diketahui',
-        success: 'Successfully logged in',
+        success: 'Berhasil masuk',
       },
       {
         duration: 3000,

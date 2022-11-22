@@ -41,14 +41,14 @@ function HomePage() {
   const [opened, setOpened] = React.useState(false);
   const [files, setFiles] = React.useState<FileWithPath[]>([]);
 
-  const { isLoading, isError, data, error } = useQuery<DocumentUser[], Error>(
-    'documentUserAll',
-    async () => {
-      const { data } = await apiMock.get('/user/dokumen');
-      logger(data);
-      return data;
-    }
-  );
+  const { isLoading, isError, data, error, refetch } = useQuery<
+    DocumentUser[],
+    Error
+  >('documentUserAll', async () => {
+    const { data } = await apiMock.get('/user/dokumen');
+    logger(data);
+    return data;
+  });
 
   const methods = useForm<DocumentData>();
   const { register, handleSubmit, reset } = methods;
@@ -68,6 +68,7 @@ function HomePage() {
           });
           setFiles([]);
           setOpened(false);
+          refetch();
         }),
       {
         ...DEFAULT_TOAST_MESSAGE,
