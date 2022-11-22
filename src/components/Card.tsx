@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
@@ -25,6 +26,12 @@ export default function Card({ item }: CardProps) {
       }
     >
       <div className='relative h-2/3 rounded-lg bg-gray-300'>
+        <Image
+          src={`data:image/png;base64,${item.path}`}
+          alt={`${item.jenis_dokumen}_${item.verifikasi}`}
+          layout='fill'
+          objectFit='cover'
+        />
         <div className='absolute bottom-3 left-3 flex h-8 items-center justify-between space-x-2 rounded-lg bg-white p-2'>
           <p className='text-xs'>{item.verifikasi}</p>
           <div

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
@@ -40,7 +41,14 @@ function DetailPage() {
           />
           <div className='flex flex-col gap-6 lg:flex-row'>
             <div className='flex h-[512px] w-full flex-initial flex-col justify-between overflow-clip rounded-lg bg-white lg:w-2/3'>
-              <div className='h-[calc(66.66%-16px)] bg-gray-300'></div>
+              <div className='relative h-[calc(66.66%-16px)] bg-gray-300'>
+                <Image
+                  src={`data:image/png;base64,${data?.path}`}
+                  alt={`${data?.jenis_dokumen}_${data?.verifikasi}`}
+                  layout='fill'
+                  objectFit='cover'
+                />
+              </div>
               <div className='flex flex-col space-y-4 p-7'>
                 <h2>{data?.jenis_dokumen}</h2>
                 <div className='flex items-center space-x-3'>
@@ -100,12 +108,6 @@ function DetailPage() {
                   </div>
                 )
               )}
-              <button
-                type='button'
-                className='inline-flex w-full justify-center rounded-xl border border-transparent py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
-              >
-                Pihak Lainnya
-              </button>
               <button
                 type='button'
                 className='inline-flex w-full justify-center rounded-xl border border-transparent bg-primary-50 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
