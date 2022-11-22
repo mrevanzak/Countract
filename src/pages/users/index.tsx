@@ -5,6 +5,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { FiSearch } from 'react-icons/fi';
 import { GrClose, GrUpload } from 'react-icons/gr';
+import { useQuery } from 'react-query';
 
 import apiMock from '@/lib/axios-mock';
 import logger from '@/lib/logger';
@@ -16,7 +17,7 @@ import Seo from '@/components/Seo';
 
 import { DEFAULT_TOAST_MESSAGE } from '@/constant/toast';
 
-import { data } from '../../data/documents.data';
+import { DocumentUser } from '@/types/item';
 
 type DocumentData = {
   jenis_dokumen: string;
@@ -33,9 +34,16 @@ function HomePage() {
   const [opened, setOpened] = React.useState(false);
   const [files, setFiles] = React.useState<FileWithPath[]>([]);
 
+  const { isLoading, isError, data, error } = useQuery<DocumentUser[], Error>(
+    'documentUserAll',
+    async () => {
+      const { data } = await apiMock.get('/user/dokumen');
+      return data.data;
+    }
+  );
+
   const methods = useForm<DocumentData>();
   const { register, handleSubmit, reset } = methods;
-
   const onSubmit: SubmitHandler<DocumentData> = (data) => {
     logger({ data }, 'users/index.tsx line 31');
 
@@ -115,9 +123,14 @@ function HomePage() {
             </div>
           </Header>
           <div className='mt-32 flex flex-wrap gap-8 mSM:mx-6'>
-            {data.map((item, itemIdx) => (
-              <Card item={item} index={itemIdx} key={itemIdx} />
-            ))}
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : isError ? (
+              <div>{error.message}</div>
+            ) : (
+              data &&
+              data.map((item, itemIdx) => <Card item={item} key={itemIdx} />)
+            )}
           </div>
 
           <Modal

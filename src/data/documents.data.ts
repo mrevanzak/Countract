@@ -1,20 +1,36 @@
-export const data = [
+import { AccessedUser, DocumentUser } from '@/types/item';
+
+export const accessedUser: AccessedUser[] = [
   {
-    name: 'Kartu Tanda Penduduk',
-    status: 'Terverifikasi',
-    totalApplication: 20,
-    totalRequest: 15,
+    nama_pengakses: 'Shopee Pay',
+    tanggal: '2022-04-23T18:25:43.511Z',
   },
   {
-    name: 'Surat Izin Mengemudi',
-    status: 'Proses Verifikasi',
-    totalApplication: 0,
-    totalRequest: 0,
+    nama_pengakses: 'Go Pay',
+    tanggal: '2022-04-23T18:25:43.511Z',
+  },
+];
+
+export const data: DocumentUser[] = [
+  {
+    id: 1,
+    jenis_dokumen: 'Kartu Tanda Penduduk',
+    verifikasi: 'Terverifikasi',
+    pihak: 20,
+    permohonan: 15,
   },
   {
-    name: 'Kartu Tanda Penduduk',
-    status: 'Tertolak',
-    totalApplication: 0,
-    totalRequest: 0,
+    id: 2,
+    jenis_dokumen: 'Surat Izin Mengemudi',
+    verifikasi: 'Proses Verifikasi',
+    pihak: 0,
+    permohonan: 0,
+  },
+  {
+    id: 3,
+    jenis_dokumen: 'Kartu Tanda Penduduk',
+    verifikasi: 'Tertolak',
+    pihak: 0,
+    permohonan: 0,
   },
 ];

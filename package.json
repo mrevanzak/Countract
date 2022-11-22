@@ -28,6 +28,7 @@
     "dayjs": "^1.11.6",
     "immer": "^9.0.16",
     "next": "^13.0.3",
+    "nextjs-cors": "^2.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.39.5",

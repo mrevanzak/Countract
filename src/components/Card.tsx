@@ -3,36 +3,35 @@ import * as React from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 import { TiDocumentText } from 'react-icons/ti';
 
-import { Item } from '@/types/item';
+import { DocumentUser } from '@/types/item';
 
 type CardProps = {
-  item: Item;
-  index: number;
+  item: DocumentUser;
 };
 
-export default function Card({ item, index }: CardProps) {
+export default function Card({ item }: CardProps) {
   const router = useRouter();
+
   return (
     <div
       className='flex h-[295px] w-full min-w-[300px] flex-1 cursor-pointer flex-col rounded-lg bg-white p-7'
       onClick={() =>
         router.push(
           {
-            pathname: `/users/detail/${index}`,
-            query: { item: JSON.stringify(item) },
+            pathname: `/users/detail/${item.id}`,
           },
-          `/users/detail/${index}`
+          `/users/detail/${item.id}`
         )
       }
     >
       <div className='relative h-2/3 rounded-lg bg-gray-300'>
         <div className='absolute bottom-3 left-3 flex h-8 items-center justify-between space-x-2 rounded-lg bg-white p-2'>
-          <p className='text-xs'>{item.status}</p>
+          <p className='text-xs'>{item.verifikasi}</p>
           <div
             className={`h-3 w-3 rounded-sm ${
-              item.status === 'Terverifikasi'
+              item.verifikasi === 'Terverifikasi'
                 ? 'bg-green-500'
-                : item.status === 'Tertolak'
+                : item.verifikasi === 'Tertolak'
                 ? 'bg-red-500'
                 : 'bg-yellow-500'
             }`}
@@ -40,15 +39,15 @@ export default function Card({ item, index }: CardProps) {
         </div>
       </div>
       <div className='flex h-1/3 flex-col justify-end'>
-        <h4>{item.name}</h4>
+        <h4>{item.jenis_dokumen}</h4>
         <div className='mt-2 flex justify-between'>
           <div className='flex items-center space-x-1'>
             <AiOutlineUser className='text-lg' />
-            <p className='text-sm'>{item.totalApplication} Pihak</p>
+            <p className='text-sm'>{item.pihak} Pihak</p>
           </div>
           <div className='flex items-center space-x-1'>
             <TiDocumentText className='text-lg' />
-            <p className='text-sm'>{item.totalRequest} Permohonan</p>
+            <p className='text-sm'>{item.permohonan} Permohonan</p>
           </div>
         </div>
       </div>

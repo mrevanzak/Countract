@@ -1,9 +1,19 @@
-export type Item = {
-  name: string;
-  status: string;
-  totalApplication: number;
-  totalRequest: number;
+export type AccessedUser = {
+  nama_pengakses: string;
+  tanggal: string;
 };
+
+export type DocumentUser = {
+  id: number;
+  jenis_dokumen: string;
+  verifikasi: 'Terverifikasi' | 'Tertolak' | 'Proses Verifikasi';
+  pihak: number;
+  permohonan: number;
+};
+
+export interface DetailDocumentUser extends DocumentUser {
+  pihak_berakses: AccessedUser[];
+}
 
 export enum Status {
   DITERIMA = 1,

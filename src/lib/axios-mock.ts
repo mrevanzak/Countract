@@ -9,7 +9,7 @@ const baseURL = process.env.NEXT_PUBLIC_PRODUCTION_URL
 export const apiMock = axios.create({
   baseURL,
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'multipart/form-data',
   },
   withCredentials: false,
 });
