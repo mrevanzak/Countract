@@ -14,7 +14,7 @@ export default function Card({ item, index }: CardProps) {
   const router = useRouter();
   return (
     <div
-      className='flex h-[295px] w-[354px] cursor-pointer flex-col rounded-lg bg-white p-7'
+      className='flex h-[295px] w-full min-w-[300px] flex-1 cursor-pointer flex-col rounded-lg bg-white p-7'
       onClick={() =>
         router.push(
           {
