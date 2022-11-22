@@ -1,5 +1,5 @@
 import { Table } from '@mantine/core';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useQuery } from 'react-query';
 
 import apiMock from '@/lib/axios-mock';
@@ -43,6 +43,7 @@ function HistoryPage() {
       {
         ...DEFAULT_TOAST_MESSAGE,
         success: 'Successfully change data',
+        error: `Error: could not change the data`,
       }
     );
   };
@@ -126,6 +127,7 @@ function HistoryPage() {
             </Table>
           </div>
         </section>
+        <Toaster />
       </main>
     </Layout>
   );

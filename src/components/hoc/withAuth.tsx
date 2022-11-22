@@ -14,7 +14,7 @@ export interface WithAuthProps {
   user: User;
 }
 
-const HOME_ROUTE = '/users';
+const USER_ROUTE = '/users';
 const LOGIN_ROUTE = '/auth/login';
 
 enum RouteRole {
@@ -104,7 +104,7 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
             if (query?.redirect) {
               router.replace(query.redirect as string);
             } else {
-              router.replace(HOME_ROUTE);
+              router.replace(USER_ROUTE);
             }
           }
         } else {

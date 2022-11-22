@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 import apiMock from '@/lib/axios-mock';
 import logger from '@/lib/logger';
@@ -66,6 +66,9 @@ function LoginPage() {
       {
         ...DEFAULT_TOAST_MESSAGE,
         success: 'Successfully logged in',
+      },
+      {
+        duration: 3000,
       }
     );
 
@@ -162,6 +165,7 @@ function LoginPage() {
                   </div>
                 </form>
               </FormProvider>
+              <Toaster />
             </div>
 
             <p className='text-xs text-gray-500'>
