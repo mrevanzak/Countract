@@ -79,20 +79,13 @@ function HomePage() {
       <main>
         <section className=''>
           <Header
-            height={{ base: 110 }}
+            height={{ base: 150, md: 110 }}
             p='md'
             top={110}
-            className='z-10 ml-64'
+            className='z-10 mSM:ml-64'
           >
-            <div
-              style={{
-                display: 'flex',
-                height: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div className='ml-3 w-full max-w-lg lg:max-w-xs'>
+            <div className='mx-3 flex h-full flex-col items-center justify-between mMD:flex-row'>
+              <div className='w-full max-w-xs mXS:self-start mMD:self-auto'>
                 <label htmlFor='search' className='sr-only'>
                   Search
                 </label>
@@ -114,14 +107,14 @@ function HomePage() {
               </div>
               <button
                 type='button'
-                className='mr-3 inline-flex items-center rounded-xl border border-transparent bg-primary-50 px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                className='inline-flex items-center justify-center self-stretch rounded-xl border border-transparent bg-primary-50 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2 mXS:self-end mXS:px-24 mMD:self-auto'
                 onClick={() => setOpened(true)}
               >
                 Tambah Dokumen
               </button>
             </div>
           </Header>
-          <div className='mx-6 mt-32 flex flex-wrap gap-8'>
+          <div className='mt-32 flex flex-wrap gap-8 mSM:mx-6'>
             {data.map((item, itemIdx) => (
               <Card item={item} index={itemIdx} key={itemIdx} />
             ))}

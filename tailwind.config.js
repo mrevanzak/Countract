@@ -9,6 +9,11 @@ module.exports = {
       fontFamily: {
         primary: ['Inter', ...fontFamily.sans],
       },
+      screens: {
+        mXS: '576px',
+        mSM: '768px',
+        mMD: '992px',
+      },
       colors: {
         primary: {
           // Customize it on globals.css :root
