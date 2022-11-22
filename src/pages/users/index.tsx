@@ -1,20 +1,65 @@
 import { Group, Header, Image, Modal, SimpleGrid } from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import * as React from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
 import { FiSearch } from 'react-icons/fi';
 import { GrClose, GrUpload } from 'react-icons/gr';
+
+import apiMock from '@/lib/axios-mock';
+import logger from '@/lib/logger';
 
 import Card from '@/components/Card';
 import withAuth from '@/components/hoc/withAuth';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
+import { DEFAULT_TOAST_MESSAGE } from '@/constant/toast';
+
 import { data } from '../../data/documents.data';
+
+type DocumentData = {
+  jenis_dokumen: string;
+  nomor_dokumen: string;
+  img_hidden: File;
+};
+
+type AddDocumentAPIRes = {
+  message: string;
+};
 
 export default withAuth(HomePage, 'all');
 function HomePage() {
   const [opened, setOpened] = React.useState(false);
   const [files, setFiles] = React.useState<FileWithPath[]>([]);
+
+  const methods = useForm<DocumentData>();
+  const { register, handleSubmit, reset } = methods;
+
+  const onSubmit: SubmitHandler<DocumentData> = (data) => {
+    logger({ data }, 'users/index.tsx line 31');
+
+    toast.promise(
+      apiMock
+        .post<AddDocumentAPIRes>(`/dokumen/upload`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then(() => {
+          reset({
+            jenis_dokumen: '',
+            nomor_dokumen: '',
+            img_hidden: undefined,
+          });
+        }),
+      {
+        ...DEFAULT_TOAST_MESSAGE,
+        success: 'Successfully add document',
+      },
+      {
+        duration: 3000,
+      }
+    );
+  };
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
@@ -29,7 +74,6 @@ function HomePage() {
   });
   return (
     <Layout>
-      {/* <Seo templateTitle='Home' /> */}
       <Seo />
 
       <main>
@@ -89,96 +133,106 @@ function HomePage() {
             withCloseButton={false}
             size={736}
           >
-            <h4 className='text-center'>Tambah Dokumen</h4>
-            <div className='space-y-5'>
-              <fieldset className='mt-6 space-y-2 bg-white'>
-                <legend className='block text-sm font-medium text-gray-700'>
-                  Jenis Dokumen
-                </legend>
-                <div className='mt-1 -space-y-px rounded-md shadow-sm'>
-                  <label htmlFor='document' className='sr-only'>
-                    document
-                  </label>
-                  <select
-                    id='document'
-                    name='document'
-                    autoComplete='document-name'
-                    className='relative block w-full rounded-md border-gray-300 bg-transparent focus:z-10 focus:border-primary-50 focus:ring-primary-50 sm:text-sm'
-                  >
-                    <option>Akta Kelahiran</option>
-                    <option>Kartu Tanda Penduduk</option>
-                    <option>Surat Izin Mengemudi</option>
-                  </select>
-                </div>
-              </fieldset>
-              <div className='space-y-2'>
-                <label
-                  htmlFor='document-number'
-                  className='block text-sm font-medium text-gray-700'
-                >
-                  Nomor Dokumen
-                </label>
-                <div className='mt-1'>
-                  <input
-                    type='text'
-                    name='document-number'
-                    id='document-number'
-                    className='block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-50 focus:ring-primary-50 sm:text-sm'
-                  />
-                </div>
-              </div>
-              <div className='space-y-2'>
-                <p className='text-sm'>Upload Dokumen</p>
-                <p className='text-sm text-gray-400'>
-                  Masukkan bukti online/screenshot dokumen
-                </p>
-                <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
-                  <Group
-                    position='center'
-                    style={{ minHeight: 168, pointerEvents: 'none' }}
-                  >
-                    <Dropzone.Accept>
-                      <GrUpload className='text-sm' />
-                    </Dropzone.Accept>
-                    <Dropzone.Reject>
-                      <GrClose className='text-sm' />
-                    </Dropzone.Reject>
-                    <Dropzone.Idle>
-                      <p className='text-xs'>
-                        Arahkan file ke area ini, atau{' '}
-                        <span className='text-blue-400'>cari dokumen</span>
-                      </p>
-                    </Dropzone.Idle>
-                  </Group>
-                </Dropzone>
+            <FormProvider {...methods}>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <h4 className='text-center'>Tambah Dokumen</h4>
+                <div className='space-y-5'>
+                  <fieldset className='mt-6 space-y-2 bg-white'>
+                    <legend className='block text-sm font-medium text-gray-700'>
+                      Jenis Dokumen
+                    </legend>
+                    <div className='mt-1 -space-y-px rounded-md shadow-sm'>
+                      <label htmlFor='jenis_dokumen' className='sr-only'>
+                        jenis_dokumen
+                      </label>
+                      <select
+                        id='jenis_dokumen'
+                        {...register('jenis_dokumen')}
+                        className='relative block w-full rounded-md border-gray-300 bg-transparent focus:z-10 focus:border-primary-50 focus:ring-primary-50 sm:text-sm'
+                      >
+                        <option>Akta Kelahiran</option>
+                        <option>Kartu Tanda Penduduk</option>
+                        <option>Surat Izin Mengemudi</option>
+                      </select>
+                    </div>
+                  </fieldset>
+                  <div className='space-y-2'>
+                    <label
+                      htmlFor='nomor_dokumen'
+                      className='block text-sm font-medium text-gray-700'
+                    >
+                      Nomor Dokumen
+                    </label>
+                    <div className='mt-1'>
+                      <input
+                        type='text'
+                        id='nomor_dokumen'
+                        {...register('nomor_dokumen')}
+                        className='block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-50 focus:ring-primary-50 sm:text-sm'
+                      />
+                    </div>
+                  </div>
+                  <div className='space-y-2'>
+                    <p className='text-sm'>Upload Dokumen</p>
+                    <p className='text-sm text-gray-400'>
+                      Masukkan bukti online/screenshot dokumen
+                    </p>
+                    <Dropzone
+                      accept={IMAGE_MIME_TYPE}
+                      onDrop={(files) => {
+                        setFiles(files);
+                        methods.setValue('img_hidden', files[0]);
+                      }}
+                    >
+                      <Group
+                        position='center'
+                        style={{ minHeight: 168, pointerEvents: 'none' }}
+                      >
+                        <Dropzone.Accept>
+                          <GrUpload className='text-sm' />
+                        </Dropzone.Accept>
+                        <Dropzone.Reject>
+                          <GrClose className='text-sm' />
+                        </Dropzone.Reject>
+                        <Dropzone.Idle>
+                          <p className='text-xs'>
+                            Arahkan file ke area ini, atau{' '}
+                            <span className='text-blue-400'>cari dokumen</span>
+                          </p>
+                        </Dropzone.Idle>
+                      </Group>
+                    </Dropzone>
 
-                <SimpleGrid
-                  cols={4}
-                  breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
-                  mt={previews.length > 0 ? 'xl' : 0}
-                >
-                  {previews}
-                </SimpleGrid>
-              </div>
-            </div>
+                    <SimpleGrid
+                      cols={4}
+                      breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
+                      mt={previews.length > 0 ? 'xl' : 0}
+                    >
+                      {previews}
+                    </SimpleGrid>
+                  </div>
+                </div>
 
-            <div className='mt-5 flex space-x-5'>
-              <button
-                type='button'
-                className='inline-flex flex-1 justify-center rounded-xl border border-transparent px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
-                onClick={() => setOpened(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type='button'
-                className='inline-flex flex-1 justify-center rounded-xl border border-transparent bg-primary-50 px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
-              >
-                Tambah
-              </button>
-            </div>
+                <div className='mt-5 flex space-x-5'>
+                  <button
+                    type='button'
+                    className='inline-flex flex-1 justify-center rounded-xl border border-transparent px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                    onClick={() => setOpened(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type='submit'
+                    className='inline-flex flex-1 justify-center rounded-xl border border-transparent bg-primary-50 px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                  >
+                    Tambah
+                  </button>
+                </div>
+              </form>
+            </FormProvider>
           </Modal>
         </section>
+        <Toaster />
       </main>
     </Layout>
   );
