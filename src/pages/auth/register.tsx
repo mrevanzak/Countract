@@ -1,12 +1,54 @@
 import { Checkbox } from '@mantine/core';
 import Link from 'next/link';
 import * as React from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
+import apiMock from '@/lib/axios-mock';
+import logger from '@/lib/logger';
 
 import withAuth from '@/components/hoc/withAuth';
 import NextImage from '@/components/NextImage';
 
+type RegisterData = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+type RegisterApiRes = {
+  message: string;
+};
+
 export default withAuth(RegisterPage, 'auth');
 function RegisterPage() {
+  const methods = useForm<RegisterData>({
+    mode: 'onTouched',
+    defaultValues: {
+      email: 'me@email.com',
+      name: 'Test',
+      password: 'password',
+    },
+  });
+  const { register, handleSubmit, reset } = methods;
+
+  const onSubmit: SubmitHandler<RegisterData> = (data) => {
+    logger({ data }, 'register.tsx line 21');
+
+    apiMock
+      .post<RegisterApiRes>(`/user/add`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((res) => {
+        toast(res.data.message);
+        reset({
+          name: '',
+          email: '',
+          password: '',
+        });
+      });
+  };
+
   return (
     <div className='flex min-h-screen'>
       <div className='relative hidden w-0 flex-1 lg:block'>
@@ -36,83 +78,86 @@ function RegisterPage() {
 
           <div className='mt-8 space-y-6'>
             <div className='mt-6'>
-              <form action='#' method='POST' className='space-y-6'>
-                <div>
-                  <label
-                    htmlFor='email'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    Alamat Email
-                  </label>
-                  <div className='mt-1'>
-                    <input
-                      id='email'
-                      name='email'
-                      type='email'
-                      autoComplete='email'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
-                    />
+              <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+                  <div>
+                    <label
+                      htmlFor='email'
+                      className='block text-sm font-medium text-gray-700'
+                    >
+                      Alamat Email
+                    </label>
+                    <div className='mt-1'>
+                      <input
+                        id='email'
+                        {...register('email')}
+                        type='email'
+                        autoComplete='email'
+                        required
+                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* <div>
-                  <label
-                    htmlFor='email'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    NIK
-                  </label>
-                  <div className='mt-1'>
-                    <input
-                      id='nik'
-                      name='nik'
-                      type='text'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
-                    />
+                  <div>
+                    <label
+                      htmlFor='name'
+                      className='block text-sm font-medium text-gray-700'
+                    >
+                      Nama
+                    </label>
+                    <div className='mt-1'>
+                      <input
+                        id='name'
+                        {...register('name')}
+                        type='text'
+                        required
+                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
+                      />
+                    </div>
                   </div>
-                </div> */}
 
-                <div className='space-y-1'>
-                  <label
-                    htmlFor='password'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    Password
-                  </label>
-                  <div className='mt-1'>
-                    <input
-                      id='password'
-                      name='password'
-                      type='password'
-                      autoComplete='current-password'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
-                    />
+                  <div className='space-y-1'>
+                    <label
+                      htmlFor='password'
+                      className='block text-sm font-medium text-gray-700'
+                    >
+                      Password
+                    </label>
+                    <div className='mt-1'>
+                      <input
+                        id='password'
+                        {...register('password')}
+                        type='password'
+                        autoComplete='current-password'
+                        required
+                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <Checkbox
-                  color='yellow'
-                  label={
-                    <p className='text-xs text-gray-500'>
-                      Dengan menekan Buat Akun, saya menyetujui bahwa saya telah
-                      membaca dan menerima{' '}
-                      <span className='text-blue-400'>Privacy Policy</span> dan{' '}
-                      <span className='text-blue-400'>Terms of Service</span>{' '}
-                      Countract.
-                    </p>
-                  }
-                />
+                  <Checkbox
+                    color='yellow'
+                    label={
+                      <p className='text-xs text-gray-500'>
+                        Dengan menekan Buat Akun, saya menyetujui bahwa saya
+                        telah membaca dan menerima{' '}
+                        <span className='text-blue-400'>Privacy Policy</span>{' '}
+                        dan{' '}
+                        <span className='text-blue-400'>Terms of Service</span>{' '}
+                        Countract.
+                      </p>
+                    }
+                  />
 
-                <button
-                  type='submit'
-                  className='flex w-full flex-1 justify-center rounded-md border border-transparent bg-primary-50 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
-                >
-                  Buat Akun
-                </button>
-              </form>
+                  <button
+                    type='submit'
+                    className='flex w-full flex-1 justify-center rounded-md border border-transparent bg-primary-50 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                  >
+                    Buat Akun
+                  </button>
+                </form>
+              </FormProvider>
             </div>
           </div>
         </div>

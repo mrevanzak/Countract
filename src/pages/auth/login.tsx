@@ -15,7 +15,6 @@ import useAuthStore from '@/store/useAuthStore';
 
 import { DEFAULT_TOAST_MESSAGE } from '@/constant/toast';
 
-import { ApiReturn } from '@/types/api';
 import { User } from '@/types/auth';
 
 type LoginData = {
@@ -39,29 +38,20 @@ function LoginPage() {
       password: 'password',
     },
   });
-  const { handleSubmit } = methods;
+  const { register, handleSubmit } = methods;
   //#endregion  //*============== Form
 
   //#region //*============== Form Submit
   const onSubmit: SubmitHandler<LoginData> = (data) => {
     logger({ data }, 'login.tsx line 36');
-    let tempToken: string;
-
     toast.promise(
       apiMock
-        .post(`/login`, data)
-        .then((res) => {
-          const { token } = res.data.data;
-          tempToken = token;
-          localStorage.setItem('token', token);
-
-          return apiMock.get<ApiReturn<User>>('/me');
+        .post<User>(`/user/login`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         })
-        .then((user) => {
-          login({
-            ...user.data.data,
-            token: tempToken,
-          });
+        .then((res) => {
+          const user = res.data;
+          login(user);
         }),
       {
         ...DEFAULT_TOAST_MESSAGE,
@@ -116,8 +106,8 @@ function LoginPage() {
                     <div className='mt-1'>
                       <input
                         id='email'
-                        name='email'
                         type='email'
+                        {...register('email')}
                         autoComplete='email'
                         required
                         className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
@@ -135,7 +125,7 @@ function LoginPage() {
                     <div className='mt-1'>
                       <input
                         id='password'
-                        name='password'
+                        {...register('password')}
                         type='password'
                         autoComplete='current-password'
                         required
