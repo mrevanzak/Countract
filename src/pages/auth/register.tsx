@@ -16,7 +16,7 @@ type RegisterData = {
   password: string;
 };
 
-type RegisterApiRes = {
+type RegisterAPIRes = {
   message: string;
 };
 
@@ -36,7 +36,7 @@ function RegisterPage() {
     logger({ data }, 'register.tsx line 21');
 
     apiMock
-      .post<RegisterApiRes>(`/user/add`, data, {
+      .post<RegisterAPIRes>(`/user/add`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((res) => {

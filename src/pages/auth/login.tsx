@@ -50,8 +50,11 @@ function LoginPage() {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then((res) => {
+          logger({ res });
           const user = res.data;
-          login(user);
+          if (user) {
+            login(user);
+          }
         }),
       {
         ...DEFAULT_TOAST_MESSAGE,
