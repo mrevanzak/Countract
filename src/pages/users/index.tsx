@@ -122,16 +122,17 @@ function HomePage() {
               </button>
             </div>
           </Header>
-          <div className='mt-32 flex flex-wrap gap-8 mSM:mx-6'>
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : isError ? (
-              <div>{error.message}</div>
-            ) : (
-              data &&
-              data.map((item, itemIdx) => <Card item={item} key={itemIdx} />)
-            )}
-          </div>
+
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : isError ? (
+            <div>{error.message}</div>
+          ) : (
+            <div className='mt-32 grid grid-cols-1 gap-8 sm:grid-cols-2 mSM:mx-6 lg:grid-cols-3'>
+              {data &&
+                data.map((item, itemIdx) => <Card item={item} key={itemIdx} />)}
+            </div>
+          )}
 
           <Modal
             opened={opened}

@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
 
 import { historicalAccessData } from '@/data/historical-access.data';
 
@@ -6,6 +7,12 @@ export default async function riwayat(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await NextCors(req, res, {
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    origin: '*',
+    optionsSuccessStatus: 200,
+  });
+
   if (req.method === 'GET') {
     const token = req.headers.authorization?.split(' ')[1];
     if (token === 'dummy-token') {
