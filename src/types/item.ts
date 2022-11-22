@@ -9,6 +9,7 @@ export type DocumentUser = {
   verifikasi: 'Terverifikasi' | 'Tertolak' | 'Proses Verifikasi';
   pihak: number;
   permohonan: number;
+  path: string;
 };
 
 export interface DetailDocumentUser extends DocumentUser {

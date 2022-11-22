@@ -18,6 +18,7 @@ export const data: DocumentUser[] = [
     verifikasi: 'Terverifikasi',
     pihak: 20,
     permohonan: 15,
+    path: 'https://images.bisnis.com/posts/2022/05/23/1536098/ilustrasi-e-ktp-atau-ktp-elektronik.jpg',
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ export const data: DocumentUser[] = [
     verifikasi: 'Proses Verifikasi',
     pihak: 0,
     permohonan: 0,
+    path: 'https://images.bisnis.com/posts/2022/05/23/1536098/ilustrasi-e-ktp-atau-ktp-elektronik.jpg',
   },
   {
     id: 3,
@@ -32,5 +34,6 @@ export const data: DocumentUser[] = [
     verifikasi: 'Tertolak',
     pihak: 0,
     permohonan: 0,
+    path: 'https://images.bisnis.com/posts/2022/05/23/1536098/ilustrasi-e-ktp-atau-ktp-elektronik.jpg',
   },
 ];
