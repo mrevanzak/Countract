@@ -44,7 +44,7 @@ function LoginPage() {
 
   //#region //*============== Form Submit
   const onSubmit: SubmitHandler<LoginData> = (data) => {
-    logger({ data }, 'signin.tsx line 36');
+    logger({ data }, 'login.tsx line 36');
     let tempToken: string;
 
     toast.promise(
