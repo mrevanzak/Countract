@@ -33,6 +33,17 @@ const nextConfig = {
 
     return config;
   },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'countract-space.sgp1.digitaloceanspaces.com',
+        pathname: '/images/**',
+        port: '',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

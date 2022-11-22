@@ -21,11 +21,8 @@ export default async function dokumen_detail(
 
     if (token === 'dummy-token') {
       return res.status(200).json({
-        code: 200,
-        data: {
-          ...value,
-          pihak_berakses: accessedUser,
-        },
+        ...value,
+        pihak_berakses: accessedUser,
       });
     } else {
       return res.status(401).json({

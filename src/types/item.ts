@@ -23,7 +23,6 @@ export enum Status {
 }
 
 export type HistoricalAccess = {
-  id_riwayat: number;
   nama_pengakses: string;
   jenis_dokumen: string;
   tanggal: string;

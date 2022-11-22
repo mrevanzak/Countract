@@ -1,4 +1,11 @@
-import { Group, Header, Image, Modal, SimpleGrid } from '@mantine/core';
+import {
+  Group,
+  Header,
+  Image,
+  Modal,
+  SimpleGrid,
+  Skeleton,
+} from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -38,7 +45,8 @@ function HomePage() {
     'documentUserAll',
     async () => {
       const { data } = await apiMock.get('/user/dokumen');
-      return data.data;
+      logger(data);
+      return data;
     }
   );
 
@@ -58,6 +66,8 @@ function HomePage() {
             nomor_dokumen: '',
             img_hidden: undefined,
           });
+          setFiles([]);
+          setOpened(false);
         }),
       {
         ...DEFAULT_TOAST_MESSAGE,
@@ -124,7 +134,7 @@ function HomePage() {
           </Header>
 
           {isLoading ? (
-            <div>Loading...</div>
+            <Skeleton height='100%' />
           ) : isError ? (
             <div>{error.message}</div>
           ) : (

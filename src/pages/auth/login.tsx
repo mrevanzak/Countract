@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import Link from 'next/link';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -22,6 +23,10 @@ type LoginData = {
   password: string;
 };
 
+type LoginError = {
+  message: string;
+};
+
 export default withAuth(LoginPage, 'auth');
 function LoginPage() {
   const isLoading = useLoadingToast();
@@ -33,10 +38,6 @@ function LoginPage() {
   //#region  //*============== Form
   const methods = useForm<LoginData>({
     mode: 'onTouched',
-    defaultValues: {
-      email: 'me@email.com',
-      password: 'password',
-    },
   });
   const { register, handleSubmit } = methods;
   //#endregion  //*============== Form
@@ -54,6 +55,8 @@ function LoginPage() {
       }),
       {
         ...DEFAULT_TOAST_MESSAGE,
+        error: (err: AxiosError<LoginError>) =>
+          err.response?.data.message ?? 'Error tidak diketahui',
         success: 'Successfully logged in',
       },
       {
@@ -105,13 +108,32 @@ function LoginPage() {
                     <div className='mt-1'>
                       <input
                         id='email'
-                        type='email'
-                        {...register('email')}
+                        // type='email'
+                        {...register('email', {
+                          required: {
+                            value: true,
+                            message: `Email harap diisi`,
+                          },
+                          pattern: {
+                            value: /^\S+@\S+$/i,
+                            message: `Format email tidak valid`,
+                          },
+                        })}
                         autoComplete='email'
                         required
                         className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
                       />
                     </div>
+                    {/* <ErrorMessage
+                      errors={errors.email}
+                      name='email'
+                      render={({ messages }) => 
+                        messages &&
+                        Object.entries(messages).map(([type, message]) => (
+                          <p key={type} className='text-sm font-medium text-red-700'>{message}</p>
+                        ))
+                      }
+                    /> */}
                   </div>
 
                   <div className='space-y-1'>
@@ -124,30 +146,33 @@ function LoginPage() {
                     <div className='mt-1'>
                       <input
                         id='password'
-                        {...register('password')}
+                        {...register('password', {
+                          required: {
+                            value: true,
+                            message: `Email harap diisi`,
+                          },
+                        })}
                         type='password'
-                        autoComplete='current-password'
-                        required
                         className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-50 focus:outline-none focus:ring-primary-50 sm:text-sm'
                       />
                     </div>
+                    {/* <ErrorMessage
+                      errors={errors.password}
+                      name='password'
+                      render={({ message }) => {
+                        logger(message)
+                        return message && (
+                          <p className='text-sm font-medium text-red-700'>{message}</p>
+                        )
+                      }}
+                    /> */}
                   </div>
 
-                  <div className='flex'>
-                    <div className='flex flex-1 items-center justify-between'>
-                      <div className='text-sm'>
-                        <a
-                          href='#'
-                          className='font-medium text-gray-400 hover:text-primary-50'
-                        >
-                          Lupa Password
-                        </a>
-                      </div>
-                    </div>
+                  <div className='flex justify-end'>
                     <ButtonWithLoading
                       type='submit'
                       isLoading={isLoading}
-                      className='flex w-full flex-1 justify-center rounded-md border border-transparent bg-primary-50 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                      className='flex w-1/2 justify-center rounded-md border border-transparent bg-primary-50 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
                     >
                       Masuk
                     </ButtonWithLoading>

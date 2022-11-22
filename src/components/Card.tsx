@@ -27,7 +27,7 @@ export default function Card({ item }: CardProps) {
     >
       <div className='relative h-2/3 rounded-lg bg-gray-300'>
         <Image
-          src={`data:image/png;base64,${item.path}`}
+          src={`${item.path}`}
           alt={`${item.jenis_dokumen}_${item.verifikasi}`}
           layout='fill'
           objectFit='cover'
@@ -50,11 +50,11 @@ export default function Card({ item }: CardProps) {
         <div className='mt-2 flex justify-between'>
           <div className='flex items-center space-x-1'>
             <AiOutlineUser className='text-lg' />
-            <p className='text-sm'>{item.pihak} Pihak</p>
+            <p className='text-sm'>{item.pihak ?? 0} Pihak</p>
           </div>
           <div className='flex items-center space-x-1'>
             <TiDocumentText className='text-lg' />
-            <p className='text-sm'>{item.permohonan} Permohonan</p>
+            <p className='text-sm'>{item.permohonan ?? 0} Permohonan</p>
           </div>
         </div>
       </div>
