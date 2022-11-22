@@ -38,8 +38,8 @@ function DetailPage() {
             className='cursor-pointer text-2xl'
             onClick={() => router.back()}
           />
-          <div className='flex space-x-6'>
-            <div className='flex h-[512px] w-2/3 flex-col justify-between overflow-clip rounded-lg bg-white'>
+          <div className='flex flex-col gap-6 lg:flex-row'>
+            <div className='flex h-[512px] w-full flex-initial flex-col justify-between overflow-clip rounded-lg bg-white lg:w-2/3'>
               <div className='h-[calc(66.66%-16px)] bg-gray-300'></div>
               <div className='flex flex-col space-y-4 p-7'>
                 <h2>{data?.jenis_dokumen}</h2>
@@ -73,7 +73,7 @@ function DetailPage() {
                 </div>
               </div>
             </div>
-            <div className='w-1/3 space-y-6 self-start rounded-2xl bg-white p-7'>
+            <div className='min-w-[330px] flex-1 space-y-6 rounded-2xl bg-white p-7'>
               <div className='flex items-center justify-between'>
                 <h4>Pihak Berakses Terakhir</h4>
                 <p className='text-xs text-gray-400'>
@@ -102,13 +102,13 @@ function DetailPage() {
               )}
               <button
                 type='button'
-                className='inline-flex w-full justify-center rounded-xl border border-transparent px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                className='inline-flex w-full justify-center rounded-xl border border-transparent py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
               >
                 Pihak Lainnya
               </button>
               <button
                 type='button'
-                className='inline-flex w-full justify-center rounded-xl border border-transparent bg-primary-50 px-24 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
+                className='inline-flex w-full justify-center rounded-xl border border-transparent bg-primary-50 py-3 text-base font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-50 focus:ring-offset-2'
               >
                 Tambah Pihak
               </button>

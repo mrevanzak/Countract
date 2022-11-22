@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           hiddenBreakpoint='sm'
           hidden={!opened}
           width={{ sm: 256 }}
-          top={0}
+          top={{ base: 110, sm: 0 }}
           height='100vh'
           className='flex items-center justify-between'
         >
