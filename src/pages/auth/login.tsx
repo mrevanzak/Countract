@@ -45,17 +45,13 @@ function LoginPage() {
   const onSubmit: SubmitHandler<LoginData> = (data) => {
     logger({ data }, 'login.tsx line 36');
     toast.promise(
-      apiMock
-        .post<User>(`/user/login`, data, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        .then((res) => {
-          logger({ res });
-          const user = res.data;
-          if (user) {
-            login(user);
-          }
-        }),
+      apiMock.post<User>(`/user/login`, data).then((res) => {
+        logger({ res });
+        const user = res.data;
+        if (user) {
+          login(user);
+        }
+      }),
       {
         ...DEFAULT_TOAST_MESSAGE,
         success: 'Successfully logged in',
