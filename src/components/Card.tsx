@@ -27,7 +27,7 @@ export default function Card({ item }: CardProps) {
     >
       <div className='relative h-2/3 rounded-lg bg-gray-300'>
         <Image
-          src={`${item.path}`}
+          src={`data:image/png;base64,${item.path}`}
           alt={`${item.jenis_dokumen}_${item.verifikasi}`}
           layout='fill'
           objectFit='cover'

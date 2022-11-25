@@ -1,17 +1,20 @@
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useQuery } from 'react-query';
 
 import apiMock from '@/lib/axios-mock';
 import { getISODatetoWIB } from '@/lib/date-time';
+import logger from '@/lib/logger';
 
 import withAuth from '@/components/hoc/withAuth';
 import Layout from '@/components/layout/Layout';
 
-import { HistoricalAccess } from '@/types/item';
+import { DEFAULT_TOAST_MESSAGE } from '@/constant/toast';
+
+import { HistoricalAccess, Status } from '@/types/item';
 
 export default withAuth(HistoryPage, 'all');
 function HistoryPage() {
-  const { isLoading, isError, data, error } = useQuery<
+  const { isLoading, isError, data, error, refetch } = useQuery<
     HistoricalAccess[],
     Error
   >('historicalAccessData', async () => {
@@ -19,30 +22,30 @@ function HistoryPage() {
     return data;
   });
 
-  // const verifyAccess = (type: number, id: number) => {
-  //   logger({ id, type }, 'index.tsx line 25');
-  //   const status = (() => {
-  //     switch (type) {
-  //       case Status.DITERIMA:
-  //         return `terima`;
-  //       case Status.DITOLAK:
-  //         return `tolak`;
-  //     }
-  //   })();
-  //   const url = `/dokumen/riwayat/` + status;
+  const verifyAccess = (type: number, id: number) => {
+    logger({ id, type }, 'index.tsx line 25');
+    const status = (() => {
+      switch (type) {
+        case Status.DITERIMA:
+          return `terima`;
+        case Status.DITOLAK:
+          return `tolak`;
+      }
+    })();
+    const url = `/dokumen/riwayat/` + status;
 
-  //   toast.promise(
-  //     apiMock.post(url, { id_riwayat: id }).then((res) => {
-  //       logger(res);
-  //       refetch();
-  //     }),
-  //     {
-  //       ...DEFAULT_TOAST_MESSAGE,
-  //       success: 'Successfully change data',
-  //       error: `Error: could not change the data`,
-  //     }
-  //   );
-  // };
+    toast.promise(
+      apiMock.post(url, { id_riwayat: id }).then((res) => {
+        logger(res);
+        refetch();
+      }),
+      {
+        ...DEFAULT_TOAST_MESSAGE,
+        success: 'Successfully change data',
+        error: `Error: could not change the data`,
+      }
+    );
+  };
 
   return (
     <Layout>
@@ -116,33 +119,33 @@ function HistoryPage() {
                                           Ditolak
                                         </p>
                                       );
-                                    // case 0:
-                                    //   return (
-                                    //     <div className='flex space-x-2'>
-                                    //       <button
-                                    //         onClick={() =>
-                                    //           verifyAccess(
-                                    //             Status.DITERIMA,
-                                    //             item.id_riwayat
-                                    //           )
-                                    //         }
-                                    //         className='inline-flex items-center rounded border border-transparent bg-green-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2'
-                                    //       >
-                                    //         Terima
-                                    //       </button>
-                                    //       <button
-                                    //         onClick={() =>
-                                    //           verifyAccess(
-                                    //             Status.DITOLAK,
-                                    //             item.id_riwayat
-                                    //           )
-                                    //         }
-                                    //         className='inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                                    //       >
-                                    //         Tolak
-                                    //       </button>
-                                    //     </div>
-                                    //   );
+                                    case 0:
+                                      return (
+                                        <div className='flex space-x-2'>
+                                          <button
+                                            onClick={() =>
+                                              verifyAccess(
+                                                Status.DITERIMA,
+                                                item.status_diterima
+                                              )
+                                            }
+                                            className='inline-flex items-center rounded border border-transparent bg-green-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2'
+                                          >
+                                            Terima
+                                          </button>
+                                          <button
+                                            onClick={() =>
+                                              verifyAccess(
+                                                Status.DITOLAK,
+                                                item.status_diterima
+                                              )
+                                            }
+                                            className='inline-flex items-center rounded border border-transparent bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+                                          >
+                                            Tolak
+                                          </button>
+                                        </div>
+                                      );
                                   }
                                 })()}
                               </td>

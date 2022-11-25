@@ -16,9 +16,7 @@ export default async function riwayat(
   if (req.method === 'GET') {
     const token = req.headers.authorization?.split(' ')[1];
     if (token === 'dummy-token') {
-      return res.status(200).json({
-        ...historicalAccessData,
-      });
+      return res.status(200).json(historicalAccessData);
     } else {
       return res.status(401).json({
         code: 401,

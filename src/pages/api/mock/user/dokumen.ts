@@ -14,9 +14,7 @@ export default async function dokumen(
   });
 
   if (req.method === 'GET') {
-    res.status(200).json({
-      data,
-    });
+    res.status(200).json(data);
   } else {
     res.status(405).json({ message: 'Method Not Allowed' });
   }
